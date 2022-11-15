@@ -4,9 +4,12 @@ Simple demo consisting of two (simulated) microservices. Application illustrates
 ## Microservices
 NOTE: whole project is physically a one application for simplicity, but can be divided by packages to standalone microservices
 - Configuration Management
-  - TBD
+  - stores maximum allowed speed
+  - contains interface for modifying the maximum allowed speed, which fires event to `max-speed` topic
 - Speed Validation
-  - TBD
+  - caches maximum allowed speed  
+  - listens for maximum speed updates on `max-speed` topic
+  - contains interface for validating the maximum allowed speed
 
 ## Technologies
 - Java: 11
