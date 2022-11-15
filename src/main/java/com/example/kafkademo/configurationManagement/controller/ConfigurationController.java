@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RequestMapping("/api/v1/configuration")
-@Tag(name = "Actions")
+@Tag(name = "Configuration Management Microservice")
 @RestController
 public class ConfigurationController {
     private final ConfigurationService configurationService;
