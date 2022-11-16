@@ -11,6 +11,12 @@ NOTE: whole project is physically a one application for simplicity, but can be d
   - listens for maximum speed updates on `max-speed` topic
   - contains interface for validating the maximum allowed speed
 
+
+## Use-cases
+## Chanching Max Speed
+- illustration of kafka consumer and producer
+![Alt text](docs/changeMaxSpeed.png?raw=true "Title")
+
 ## Technologies
 - Java: 11
 - Spring Boot: 2.7.5
