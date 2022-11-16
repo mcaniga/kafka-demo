@@ -14,9 +14,10 @@ public class ConfigurationService {
         this.configurationDao = configurationDao;
     }
 
-    public MaxSpeedResponse changeMaxSpeed(int maxSpeed) {
+    public MaxSpeedResponse changeMaxSpeed(int maxSpeed, int busId) {
         log.debug("Saving max speed: {}", maxSpeed);
-        configurationDao.saveMaxSpeed(maxSpeed);
-        return new MaxSpeedResponse(maxSpeed);
+        configurationDao.saveMaxSpeed(maxSpeed, busId);
+        // TODO: send event here
+        return new MaxSpeedResponse(maxSpeed, busId);
     }
 }

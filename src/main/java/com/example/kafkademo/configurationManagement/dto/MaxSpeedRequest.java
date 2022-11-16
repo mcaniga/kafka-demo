@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class MaxSpeedRequest {
     private int maxSpeed;
+    private int busId;
 }

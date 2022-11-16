@@ -5,6 +5,7 @@ import com.example.kafkademo.speedValidation.dto.SpeedValidationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+// TODO: consider if speed should be validated based on vehicleType (add to conf. management)
 @Slf4j
 @Service
 public class SpeedValidationService {

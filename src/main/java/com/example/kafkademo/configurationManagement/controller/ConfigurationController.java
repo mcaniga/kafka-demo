@@ -28,7 +28,7 @@ public class ConfigurationController {
     @PostMapping(value = "/changeMaxSpeed", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<MaxSpeedResponse> changeMaxSpeed(@Valid @RequestBody MaxSpeedRequest maxSpeedRequest) {
-        MaxSpeedResponse response = configurationService.changeMaxSpeed(maxSpeedRequest.getMaxSpeed());
+        MaxSpeedResponse response = configurationService.changeMaxSpeed(maxSpeedRequest.getMaxSpeed(), maxSpeedRequest.getBusId());
         return ResponseEntity.ok(response);
     }
 }
