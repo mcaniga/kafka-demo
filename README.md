@@ -26,7 +26,7 @@ NOTE: whole project is physically a one application for simplicity, but can be d
 - TBD
 
 ## Swagger URL
-- TBD
+- http://localhost:8080/swagger-ui/index.html
 
 ## Topics
 - `max-speed`
