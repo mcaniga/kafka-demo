@@ -1,7 +1,7 @@
 package com.example.kafkademo.configurationManagement.controller;
 
 import com.example.kafkademo.configurationManagement.dto.MaxSpeedRequest;
-import com.example.kafkademo.configurationManagement.dto.MaxSpeedResponse;
+import com.example.kafkademo.common.dto.MaxSpeedResponse;
 import com.example.kafkademo.configurationManagement.service.ConfigurationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

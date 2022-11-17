@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class SpeedValidationRequest {
     private int speed;
-    private long busId;
+    private int busId;
 }

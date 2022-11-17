@@ -1,4 +1,4 @@
-package com.example.kafkademo.configurationManagement.dto;
+package com.example.kafkademo.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

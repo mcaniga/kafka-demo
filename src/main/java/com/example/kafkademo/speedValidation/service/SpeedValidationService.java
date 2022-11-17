@@ -1,25 +1,35 @@
 package com.example.kafkademo.speedValidation.service;
 
+import com.example.kafkademo.speedValidation.client.ConfigurationManagementClient;
 import com.example.kafkademo.speedValidation.dto.SpeedValidationRequest;
 import com.example.kafkademo.speedValidation.dto.SpeedValidationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-// TODO: consider if speed should be validated based on vehicleType (add to conf. management)
 @Slf4j
 @Service
 public class SpeedValidationService {
-    private int maxSpeed;
+    private final SpeedValidationCache speedValidationCache;
+    private final ConfigurationManagementClient configurationManagementClient;
 
-    public SpeedValidationService() {
-        // ideally, max speed should be fetched from management on startup, but this is enough for illustration purposes :))
-        this.maxSpeed = 50;
+    public SpeedValidationService(
+        SpeedValidationCache speedValidationCache,
+        ConfigurationManagementClient configurationManagementClient
+    ) {
+        this.speedValidationCache = speedValidationCache;
+        this.configurationManagementClient = configurationManagementClient;
     }
 
     public SpeedValidationResponse validate(SpeedValidationRequest speedValidationRequest) {
         log.debug("Validating speed: {}", speedValidationRequest);
-        boolean isMaxSpeedViolated = isMaxSpeedViolation(speedValidationRequest);
-        SpeedValidationResponse response = new SpeedValidationResponse();
+        int maxSpeed = speedValidationCache.getMaxSpeed(speedValidationRequest.getBusId());
+        boolean isMaxSpeedViolated = isMaxSpeedViolation(speedValidationRequest, maxSpeed);
+        SpeedValidationResponse response = new SpeedValidationResponse(
+            isMaxSpeedViolated,
+            maxSpeed,
+            speedValidationRequest.getSpeed(),
+            speedValidationRequest.getBusId()
+        );
         if (isMaxSpeedViolated) {
             log.debug("Max speed was violated");
             // here we can send response eg. to 'speed-violation' topic for futher processing (eg. to take action)
@@ -27,12 +37,13 @@ public class SpeedValidationService {
         return response;
     }
 
-    private boolean isMaxSpeedViolation(SpeedValidationRequest speedValidationRequest) {
-        return speedValidationRequest.getSpeed() > maxSpeed;
+    public void cacheMaxSpeed(int busId) {
+        log.debug("Caching max speed for bus with id: {}", busId);
+        int maxSpeed = configurationManagementClient.getMaxSpeed(busId);
+        speedValidationCache.saveMaxSpeed(maxSpeed, busId);
     }
 
-    // TODO: create listener, listen to 'max-speed' topic, change SpeedValidationService.maxSpeed when message comes
-    public void changeMaxSpeed(int maxSpeed) {
-        this.maxSpeed = maxSpeed;
+    private boolean isMaxSpeedViolation(SpeedValidationRequest speedValidationRequest, int maxSpeed) {
+        return speedValidationRequest.getSpeed() > maxSpeed;
     }
 }

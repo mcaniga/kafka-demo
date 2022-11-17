@@ -11,5 +11,5 @@ public class SpeedValidationResponse {
     boolean isViolation;
     private int maxSpeed;
     private int speed;
-    private long busId;
+    private int busId;
 }

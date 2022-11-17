@@ -1,6 +1,10 @@
 # Instea TechTalk: Kafka
 Simple demo consisting of two (simulated) microservices. Application illustrates usage of Kafka with Spring Boot.
 
+## Local installation#
+- `docker-compose up -d`
+- launches Zookeeper on port `22181`, single-node Kafka on port `29092` and Kafka-UI on port `8085`
+
 ## Microservices
 NOTE: whole project is physically a one application for simplicity, but can be divided by packages to standalone microservices
 - Configuration Management

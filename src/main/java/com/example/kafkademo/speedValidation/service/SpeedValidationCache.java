@@ -1,17 +1,18 @@
-package com.example.kafkademo.configurationManagement.dao;
+package com.example.kafkademo.speedValidation.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@Repository
-public class ConfigurationDao {
+@Service
+public class SpeedValidationCache {
     private final Map<Integer, Integer> busMaxSpeed;
 
-    public ConfigurationDao() {
+    public SpeedValidationCache() {
+        // ideally, max speed should be fetched from management on startup, but this is enough for illustration purposes :))
         this.busMaxSpeed = new ConcurrentHashMap<>();
     }
 
