@@ -20,6 +20,9 @@ NOTE: whole project is physically a one application for simplicity, but can be d
 ## Use-cases
 ## Changing Max Speed
 - illustration of kafka consumer and producer
+- advantage of Kafka in this use-case
+   - possible to have multiple speed validators, management does need to know about them
+   - multiple speed validators are handled by Kafka - using group id
 ![Alt text](docs/changeMaxSpeed.png?raw=true "Title")
 
 ## Technologies
