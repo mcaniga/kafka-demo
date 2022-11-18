@@ -2,17 +2,20 @@ package com.example.kafkademo.configurationManagement;
 
 import com.example.kafkademo.common.BaseIntergrationTest;
 import com.example.kafkademo.common.dto.MaxSpeedResponse;
+import com.example.kafkademo.configurationManagement.dao.ConfigurationDao;
 import com.example.kafkademo.configurationManagement.dto.MaxSpeedRequest;
 import com.example.kafkademo.configurationManagement.kafka.MaxSpeedProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,7 +24,12 @@ import static org.mockito.Mockito.verify;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+// NOTE: BEFORE_EACH_TEST_METHOD doesn't work nicely with @MockBean/@SpyBean
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class ConfigurationManagementTest extends BaseIntergrationTest {
+    @Autowired
+    private ConfigurationDao configurationDao;
+
     @SpyBean
     private MaxSpeedProducer maxSpeedProducer;
 
@@ -46,6 +54,7 @@ class ConfigurationManagementTest extends BaseIntergrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getMaxSpeed()).isEqualTo(60);
         assertThat(response.getBody().getBusId()).isEqualTo(10);
+        assertThat(configurationDao.getMaxSpeed(10)).isEqualTo(60);
 
         // important part - verification that event was sent to Kafka
         verify(maxSpeedProducer, times(1)).send(any());
