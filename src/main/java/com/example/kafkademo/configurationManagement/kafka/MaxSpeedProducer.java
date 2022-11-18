@@ -1,7 +1,7 @@
 package com.example.kafkademo.configurationManagement.kafka;
 
+import com.example.kafkademo.common.dto.MaxSpeedUpdateEvent;
 import com.example.kafkademo.configurationManagement.config.MaxSpeedProducerProperties;
-import com.example.kafkademo.common.dto.MaxSpeedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -10,19 +10,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class MaxSpeedProducer {
     private final String topic;
-    private final KafkaTemplate<String, MaxSpeedResponse> template;
+    private final KafkaTemplate<String, MaxSpeedUpdateEvent> template;
 
     public MaxSpeedProducer(
             MaxSpeedProducerProperties properties,
-            KafkaTemplate<String, MaxSpeedResponse> template
+            KafkaTemplate<String, MaxSpeedUpdateEvent> template
     ) {
         this.topic = properties.getTopic();
         this.template = template;
     }
 
-    public void send(MaxSpeedResponse maxSpeedResponse) {
-        log.debug("sending payload='{}' to topic='{}'", maxSpeedResponse, topic);
-        // TODO: specify key to support concurrency with group-id
-        template.send(topic, maxSpeedResponse);
+    public void send(int busId) {
+        MaxSpeedUpdateEvent maxSpeedUpdateEvent = new MaxSpeedUpdateEvent(busId);
+        log.debug("sending payload='{}' to topic='{}'", maxSpeedUpdateEvent, topic);
+        template.send(topic, maxSpeedUpdateEvent);
     }
 }

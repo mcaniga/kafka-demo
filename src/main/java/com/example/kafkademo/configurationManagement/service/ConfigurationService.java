@@ -1,5 +1,6 @@
 package com.example.kafkademo.configurationManagement.service;
 
+import com.example.kafkademo.common.dto.MaxSpeedUpdateEvent;
 import com.example.kafkademo.configurationManagement.dao.ConfigurationDao;
 import com.example.kafkademo.common.dto.MaxSpeedResponse;
 import com.example.kafkademo.configurationManagement.kafka.MaxSpeedProducer;
@@ -24,7 +25,7 @@ public class ConfigurationService {
         log.debug("Saving max speed: {}", maxSpeed);
         configurationDao.saveMaxSpeed(maxSpeed, busId);
         MaxSpeedResponse maxSpeedResponse = new MaxSpeedResponse(maxSpeed, busId);
-        maxSpeedProducer.send(maxSpeedResponse);
+        maxSpeedProducer.send(busId);
         return maxSpeedResponse;
     }
 
