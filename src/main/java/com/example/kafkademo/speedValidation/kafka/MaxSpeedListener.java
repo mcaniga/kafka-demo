@@ -29,7 +29,7 @@ public class MaxSpeedListener {
     @KafkaListener(
             id = "maxSpeedListener",
             topics = "${speed-validation.max-speed-listener.topic}",
-            // TODO: add groupId = "${speed-validation.max-speed-listener.groupId}",
+            groupId = "${speed-validation.max-speed-listener.groupId}",
             autoStartup = "${speed-validation.max-speed-listener.autoStartup}"
     )
     public void updateMaxSpeed(ConsumerRecord<?, MaxSpeedResponse> consumerRecord) {
