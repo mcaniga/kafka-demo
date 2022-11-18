@@ -70,7 +70,7 @@ public class SpeedFraudPipeline implements Detector {
         streamsBuilder
                 .stream(inputTopic, Consumed.with(STRING_SERDE, tapSerde)
                         .withTimestampExtractor(tapTimestampExtractor))
-                .selectKey((k, v) -> v.getBot())
+                .selectKey((k, v) -> v.getMediumId())
                 .groupByKey()
                 .windowedBy(sessionWindows)
                 .aggregate(TapAccumulator::new,
@@ -92,21 +92,21 @@ public class SpeedFraudPipeline implements Detector {
         log.info("Previous taps: {} Actual value: {}", accumulator.getTaps(), tap);
         if (accumulator.getTaps() == null) {
             accumulator.setTaps(new TreeMap<>());
-            accumulator.getTaps().put(tap.getDate(), tap);
+            accumulator.getTaps().put(tap.getTimestamp(), tap);
             return accumulator;
         }
 
         //Count distance for lower date
-        final Map.Entry<Instant, ValidatedTap> floorTapEntry = accumulator.getTaps().floorEntry(tap.getDate());
+        final Map.Entry<Instant, ValidatedTap> floorTapEntry = accumulator.getTaps().floorEntry(tap.getTimestamp());
         final double floorSpeed = getSpeed(tap, floorTapEntry);
         log.debug("Floor speed {}", floorSpeed);
 
         //Count distance for higher date late taps
-        final Map.Entry<Instant, ValidatedTap> ceilingTapEntry = accumulator.getTaps().ceilingEntry(tap.getDate());
+        final Map.Entry<Instant, ValidatedTap> ceilingTapEntry = accumulator.getTaps().ceilingEntry(tap.getTimestamp());
         final double ceilingSpeed = getSpeed(tap, ceilingTapEntry);
         log.debug("Ceiling speed {}", ceilingSpeed);
 
-        accumulator.getTaps().put(tap.getDate(), tap);
+        accumulator.getTaps().put(tap.getTimestamp(), tap);
 
         if (floorSpeed > fraudSpeed || ceilingSpeed > fraudSpeed) {
             accumulator.setFraudTap(tap);
@@ -135,7 +135,7 @@ public class SpeedFraudPipeline implements Detector {
         final double distance = distance(actualCoordinates.getLatitude(), actualCoordinates.getLongitude(),
                 existedCoordinates.getLatitude(), existedCoordinates.getLongitude());
 
-        final long time = ChronoUnit.SECONDS.between(actual.getDate(), existed.getKey());
+        final long time = ChronoUnit.SECONDS.between(actual.getTimestamp(), existed.getKey());
         if (time == 0) {
             log.warn("Zero time diff between actual {} and existed {}", actual, existed.getValue());
             return 0;

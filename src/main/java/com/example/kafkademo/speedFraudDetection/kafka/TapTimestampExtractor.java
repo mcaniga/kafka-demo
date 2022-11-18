@@ -10,7 +10,7 @@ public class TapTimestampExtractor implements TimestampExtractor {
         var value = consumerRecord.value();
         if (value instanceof ValidatedTap) {
             ValidatedTap tap = (ValidatedTap) value;
-            return tap.getDate().toEpochMilli();
+            return tap.getTimestamp().toEpochMilli();
         }
         return -1;
     }
