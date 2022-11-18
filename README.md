@@ -42,14 +42,13 @@ NOTE: whole project is physically a one application for simplicity, but can be d
 
 ## Topics
 - `max-speed`
-    - event key: TBD
     - event content:
-        - `maxSpeed`
-            - specifies maximum bus speed in km/h
-            - eg. `50`
+        - `busId`
+            - specifies which bus was updated
+            - eg. `10`
     - example event
 ```yaml
 {
-   "maxSpeed": 50
+   "busId": 10
 }
 ```
