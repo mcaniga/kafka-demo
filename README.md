@@ -24,6 +24,10 @@ NOTE: whole project is physically a one application for simplicity, but can be d
    - possible to have multiple speed validators, management does need to know about them
    - multiple speed validators are handled by Kafka - using group id
 ![Alt text](docs/changeMaxSpeed.png?raw=true "Title")
+## Validating Max Speed
+- advantage of Kafka in this use-case
+    - possible to send events in case of speed violation
+![Alt text](docs/validateMaxSpeed.png?raw=true "Title")
 
 ## Technologies
 - Java: 11
