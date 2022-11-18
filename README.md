@@ -1,5 +1,5 @@
 # Instea TechTalk: Kafka
-Simple demo consisting of two (simulated) microservices. Application illustrates usage of Kafka with Spring Boot.
+Simple demo consisting of three (simulated) microservices. Application illustrates usage of Kafka with Spring Boot.
 
 ## Local installation
 - set IDE to use Java 11
@@ -15,7 +15,10 @@ NOTE: whole project is physically a one application for simplicity, but can be d
   - caches maximum allowed speed  
   - listens for maximum speed updates on `max-speed` topic
   - contains interface for validating the maximum allowed speed
-
+- Speed Fraud Detection
+    - contains interface for sending taps
+    - listens to `validated-tap` topic and writes fradulent taps to `fraud-taps`
+    - identification of fradulent taps is done via Kafka Streams
 
 ## Use-cases
 ## Changing Max Speed
@@ -28,6 +31,9 @@ NOTE: whole project is physically a one application for simplicity, but can be d
 - advantage of Kafka in this use-case
     - possible to send events in case of speed violation
 ![Alt text](docs/validateMaxSpeed.png?raw=true "Title")
+## Speed Fraud Detection
+- illustration of kafka streams
+![Alt text](docs/speedFraudDetection.png?raw=true "Title")
 
 ## Technologies
 - Java: 11
