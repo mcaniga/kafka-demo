@@ -1,4 +1,4 @@
-package com.example.kafkademo.speedValidation.kafka.serdes;
+package com.example.kafkademo.speedFraudDetection.kafka.serdes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Serializer;

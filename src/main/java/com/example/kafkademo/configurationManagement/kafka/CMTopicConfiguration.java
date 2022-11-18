@@ -10,10 +10,10 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Slf4j
 @Configuration
-public class TopicConfiguration {
+public class CMTopicConfiguration {
     private final MaxSpeedProducerProperties maxSpeedProducerProperties;
 
-    public TopicConfiguration(
+    public CMTopicConfiguration(
         MaxSpeedProducerProperties maxSpeedProducerProperties
     ) {
         log.info(
