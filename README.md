@@ -18,7 +18,7 @@ NOTE: whole project is physically a one application for simplicity, but can be d
 
 
 ## Use-cases
-## Chanching Max Speed
+## Changing Max Speed
 - illustration of kafka consumer and producer
 ![Alt text](docs/changeMaxSpeed.png?raw=true "Title")
 
