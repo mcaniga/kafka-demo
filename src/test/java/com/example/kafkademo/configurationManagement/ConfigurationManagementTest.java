@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -36,7 +36,7 @@ class ConfigurationManagementTest extends BaseIntergrationTest {
     @BeforeEach
     void setup() {
         // important part - mock sending to Kafka, necessary if no embeded Kafka is used in tests
-        Mockito.doNothing().when(maxSpeedProducer).send(any());
+        Mockito.doNothing().when(maxSpeedProducer).send(anyInt());
     }
 
     @Test
@@ -57,7 +57,7 @@ class ConfigurationManagementTest extends BaseIntergrationTest {
         assertThat(configurationDao.getMaxSpeed(10)).isEqualTo(60);
 
         // important part - verification that event was sent to Kafka
-        verify(maxSpeedProducer, times(1)).send(any());
+        verify(maxSpeedProducer, times(1)).send(anyInt());
     }
 
 }
