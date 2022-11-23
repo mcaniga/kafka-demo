@@ -8,6 +8,7 @@ Simple demo consisting of three (simulated) microservices. Application illustrat
 
 ## Microservices
 NOTE: whole project is physically a one application for simplicity, but can be divided by packages to standalone microservices
+NOTE2: Kafka specific classes are in `kafka` packages in each microservice
 - Configuration Management
   - stores maximum allowed speed
   - contains interface for modifying the maximum allowed speed, which fires event to `max-speed` topic
