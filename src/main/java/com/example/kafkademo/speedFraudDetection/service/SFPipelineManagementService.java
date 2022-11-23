@@ -31,8 +31,8 @@ public class SFPipelineManagementService {
        @Value("${spring.kafka.bootstrap-servers}") String kafkaUrl,
        @Value("${kafka.applicationId}") String applicationId,
        @Value("${speed-fraud-detection.autoStartup}") Boolean autoStartup,
-       @Value("${speed-fraud-detection.inactivityGap}") Integer inactivityGap,
-       @Value("${speed-fraud-detection.fraudSpeed}") Integer fraudSpeed,
+       @Value("${speed-fraud-detection.inactivityGapInHours}") Integer inactivityGap,
+       @Value("${speed-fraud-detection.fraudSpeedInKmh}") Integer fraudSpeed,
        ObjectMapper objectMapper
     ) {
         this.inputTopic = inputTopic;

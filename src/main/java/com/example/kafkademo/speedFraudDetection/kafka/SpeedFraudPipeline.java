@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.kafkademo.speedFraudDetection.service.GpsUtils.distance;
+import static com.example.kafkademo.speedFraudDetection.service.GpsUtils.calculateDistanceInKmh;
 
 @Slf4j
 public class SpeedFraudPipeline implements Detector {
@@ -35,7 +35,7 @@ public class SpeedFraudPipeline implements Detector {
 
     private ScheduledExecutorService service;
 
-    private final Integer inactivityGap;
+    private final Integer inactivityGapInHours;
     private final String inputTopic;
     private final String outputTopic;
     private final Integer fraudSpeed;
@@ -45,17 +45,17 @@ public class SpeedFraudPipeline implements Detector {
 
     private KafkaStreams streams;
 
-    public SpeedFraudPipeline(Integer inactivityGap,
+    public SpeedFraudPipeline(Integer inactivityGapInHours,
                               String inputTopic,
                               String outputTopic,
-                              Integer fraudSpeed,
+                              Integer fraudSpeedInKmh,
                               Properties kafkaConfig,
                               ObjectMapper objectMapper
     ) {
-        this.inactivityGap = inactivityGap;
+        this.inactivityGapInHours = inactivityGapInHours;
         this.inputTopic = inputTopic;
         this.outputTopic = outputTopic;
-        this.fraudSpeed = fraudSpeed;
+        this.fraudSpeed = fraudSpeedInKmh;
         this.kafkaConfig = kafkaConfig;
         this.objectMapper = objectMapper;
         this.tapTimestampExtractor = new TapTimestampExtractor();
@@ -64,7 +64,7 @@ public class SpeedFraudPipeline implements Detector {
     public Topology buildPipeline(StreamsBuilder streamsBuilder) {
         final var tapSerde = new ObjectMapperSerde<>(ValidatedTap.class, objectMapper);
         final var accumulatorSerde = new ObjectMapperSerde<>(TapAccumulator.class, objectMapper);
-        final Duration windowSize = Duration.ofHours(inactivityGap);
+        final Duration windowSize = Duration.ofHours(inactivityGapInHours);
         final SessionWindows sessionWindows = SessionWindows.ofInactivityGapWithNoGrace(windowSize);
 
         streamsBuilder
@@ -108,7 +108,9 @@ public class SpeedFraudPipeline implements Detector {
 
         accumulator.getTaps().put(tap.getTimestamp(), tap);
 
+        log.debug("Calulating if tap is fraud floorSpeed: {}, fraudSpeed: {}, ceilingSpeed: {}", floorSpeed, fraudSpeed, ceilingSpeed);
         if (floorSpeed > fraudSpeed || ceilingSpeed > fraudSpeed) {
+            log.debug("Tap: {} was detected as fraud", tap);
             accumulator.setFraudTap(tap);
         }
 
@@ -132,10 +134,11 @@ public class SpeedFraudPipeline implements Detector {
         }
         final GpsCoordinates actualCoordinates = actual.getGpsCoordinates();
         final GpsCoordinates existedCoordinates = existed.getValue().getGpsCoordinates();
-        final double distance = distance(actualCoordinates.getLatitude(), actualCoordinates.getLongitude(),
-                existedCoordinates.getLatitude(), existedCoordinates.getLongitude());
-
-        final long time = ChronoUnit.SECONDS.between(actual.getTimestamp(), existed.getKey());
+        final double distance = calculateDistanceInKmh(
+                actualCoordinates.getLatitude(), actualCoordinates.getLongitude(),
+                existedCoordinates.getLatitude(), existedCoordinates.getLongitude()
+        );
+        final long time = Math.abs(ChronoUnit.SECONDS.between(actual.getTimestamp(), existed.getKey()));
         if (time == 0) {
             log.warn("Zero time diff between actual {} and existed {}", actual, existed.getValue());
             return 0;

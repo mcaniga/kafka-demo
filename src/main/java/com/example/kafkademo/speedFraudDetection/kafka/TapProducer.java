@@ -1,6 +1,6 @@
 package com.example.kafkademo.speedFraudDetection.kafka;
 
-import com.example.kafkademo.configurationManagement.config.MaxSpeedProducerProperties;
+import com.example.kafkademo.speedFraudDetection.config.SFInputTopicProperties;
 import com.example.kafkademo.speedFraudDetection.dto.ValidatedTap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,7 +13,7 @@ public class TapProducer {
     private final KafkaTemplate<String, ValidatedTap> template;
 
     public TapProducer(
-            MaxSpeedProducerProperties properties,
+            SFInputTopicProperties properties,
             KafkaTemplate<String, ValidatedTap> template
     ) {
         this.topic = properties.getTopic();
