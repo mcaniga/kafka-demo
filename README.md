@@ -59,3 +59,51 @@ NOTE2: Kafka specific classes are in `kafka` packages in each microservice
    "busId": 10
 }
 ```
+
+- `validated-tap`
+  - event key: bot
+  - event content:
+    - `mediumId`
+      - specifies identifier of the medium"
+      - eg. `50`
+    - `gpsCoordinates`
+      - specifies coordinates with `latitude` and `longitude`
+      - example bellow
+    - `timestamp`
+      - specifies timestamp of the tap in ISO-8601
+      - eg. `"2022-01-10T15:23:44Z"`
+  - example event
+```yaml
+{
+  "mediumId": 50,
+  "gpsCoordinates": {
+    "latitude": 50.42,
+    "longitude": 60.13
+  },
+  "timestamp": "2022-01-10T15:23:44Z"
+}
+```
+
+- `fraud-tap`
+  - event key: bot  
+  - event content:
+    - `mediumId`
+      - specifies identifier of the medium"
+      - eg. `50`
+    - `gpsCoordinates`
+      - specifies coordinates with `latitude` and `longitude`
+      - example bellow
+    - `timestamp`
+      - specifies timestamp of the tap in ISO-8601
+      - eg. `"2022-01-10T15:23:44Z"`
+  - example event
+```yaml
+{
+   "mediumId": 50,
+   "gpsCoordinates": {
+    "latitude": 50.42,
+    "longitude": 60.13
+   },
+   "timestamp": "2022-01-10T15:23:44Z"
+}
+```
