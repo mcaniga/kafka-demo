@@ -1,7 +1,7 @@
 version: '2'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:7.3.0
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -9,17 +9,25 @@ services:
       - 22181:2181
 
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.3.0
     depends_on:
       - zookeeper
     ports:
       - 29092:29092
     environment:
+      # Specifies ID of the Kafka broker
       KAFKA_BROKER_ID: 1
+      # Specifies connection to zookeeper
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # Describes how clients can connect
+      # The value is published to ZooKeeper for clients to use.
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      # Defines key/value pairs for the security protocol to use, per listener name
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      # Defines which listener to use for inter-broker communication
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      # Defines replication factor of the system topic used to store consumer offsets
+      # For single node clusters it is required to be set to `1`
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   kafka-ui:

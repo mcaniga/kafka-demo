@@ -23,6 +23,6 @@ public class MaxSpeedProducer {
     public void send(int busId) {
         MaxSpeedUpdateEvent maxSpeedUpdateEvent = new MaxSpeedUpdateEvent(busId);
         log.debug("sending payload='{}' to topic='{}'", maxSpeedUpdateEvent, topic);
-        template.send(topic, maxSpeedUpdateEvent);
+        template.send(topic, String.valueOf(busId), maxSpeedUpdateEvent);
     }
 }

@@ -61,7 +61,7 @@ NOTE2: Kafka specific classes are in `kafka` packages in each microservice
 ```
 
 - `validated-tap`
-  - event key: bot
+  - event key: mediumId
   - event content:
     - `mediumId`
       - specifies identifier of the medium"
@@ -85,7 +85,7 @@ NOTE2: Kafka specific classes are in `kafka` packages in each microservice
 ```
 
 - `fraud-tap`
-  - event key: bot  
+  - event key: mediumId  
   - event content:
     - `mediumId`
       - specifies identifier of the medium"

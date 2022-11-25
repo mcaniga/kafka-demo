@@ -61,6 +61,10 @@ public class SpeedFraudPipeline implements Detector {
         this.tapTimestampExtractor = new TapTimestampExtractor();
     }
 
+    /**
+     * A Topology allows you to construct an acyclic graph of processing nodes (source, processor, sink), and then passed
+     * into a new KafkaStream instance that will then begin consuming, processing, and producing records.
+     */
     public Topology buildPipeline(StreamsBuilder streamsBuilder) {
         final var tapSerde = new ObjectMapperSerde<>(ValidatedTap.class, objectMapper);
         final var accumulatorSerde = new ObjectMapperSerde<>(TapAccumulator.class, objectMapper);
@@ -69,20 +73,21 @@ public class SpeedFraudPipeline implements Detector {
 
         streamsBuilder
                 .stream(inputTopic, Consumed.with(STRING_SERDE, tapSerde)
-                        .withTimestampExtractor(tapTimestampExtractor))
+                        .withTimestampExtractor(tapTimestampExtractor)) // listener
                 .selectKey((k, v) -> v.getMediumId())
-                .groupByKey()
+                .groupByKey() // group taps by mediumId
                 .windowedBy(sessionWindows)
-                .aggregate(TapAccumulator::new,
-                        this::fraudTaps,
-                        this::merger,
-                        Materialized.with(STRING_SERDE, accumulatorSerde)
-                )
+                .aggregate(TapAccumulator::new, // initial value of accumulator
+                        this::fraudTaps, // accumulator step
+                        this::merger, // merge function, used when windows are overlapping - late taps
+                        Materialized.with(STRING_SERDE, accumulatorSerde) // kafka store, caching mechanism for statefull operations , can RocksDB, hashmap, ...
+                ) // for each window compute agregate function
                 .toStream()
-                .filter((k, v) -> v != null && v.getFraudTap() != null)
-                .map((key, value) -> KeyValue.pair(key.key(), value.getFraudTap()))
+                .peek((k, v) -> log.debug("Aggregated taps - mediumId: {}, tap acumulator: {}", k.key(), v))
+                .filter((k, v) -> v != null && v.getFraudTap() != null) // filter non-fraud taps
+                .map((key, value) -> KeyValue.pair(key.key(), value.getFraudTap())) // map to <String, ValidatedTap> keypair
                 // need to map Windowed to string (or provide serde)
-                .to(outputTopic, Produced.with(STRING_SERDE, tapSerde));
+                .to(outputTopic, Produced.with(STRING_SERDE, tapSerde)); // producer
 
         return streamsBuilder.build();
     }
@@ -96,19 +101,21 @@ public class SpeedFraudPipeline implements Detector {
             return accumulator;
         }
 
-        //Count distance for lower date
+        // Count speed between current tap and his predecessor
         final Map.Entry<Instant, ValidatedTap> floorTapEntry = accumulator.getTaps().floorEntry(tap.getTimestamp());
         final double floorSpeed = getSpeed(tap, floorTapEntry);
         log.debug("Floor speed {}", floorSpeed);
 
-        //Count distance for higher date late taps
+        // Count speed between current tap and his successor
         final Map.Entry<Instant, ValidatedTap> ceilingTapEntry = accumulator.getTaps().ceilingEntry(tap.getTimestamp());
         final double ceilingSpeed = getSpeed(tap, ceilingTapEntry);
         log.debug("Ceiling speed {}", ceilingSpeed);
 
+        // put to proccesed taps
         accumulator.getTaps().put(tap.getTimestamp(), tap);
 
         log.debug("Calulating if tap is fraud floorSpeed: {}, fraudSpeed: {}, ceilingSpeed: {}", floorSpeed, fraudSpeed, ceilingSpeed);
+        // determines if speed between current tap and his predecessor or current tap and his successor his higher than allowed
         if (floorSpeed > fraudSpeed || ceilingSpeed > fraudSpeed) {
             log.debug("Tap: {} was detected as fraud", tap);
             accumulator.setFraudTap(tap);
@@ -120,29 +127,38 @@ public class SpeedFraudPipeline implements Detector {
     private TapAccumulator merger(String key, TapAccumulator previousSession, TapAccumulator streamAccumulator) {
 
         if (previousSession.getTaps() != null) {
+            // merge windows, put taps from previous session into processed taps
             streamAccumulator.getTaps().putAll(previousSession.getTaps());
         }
 
+        // because late tap arrived, we must find again the fraud tap (what was initially fraud, now maybe is not because of new tap)
         streamAccumulator.setFraudTap(null);
         return streamAccumulator;
     }
 
     public double getSpeed(ValidatedTap actual, Map.Entry<Instant, ValidatedTap> existed) {
+        // existed = previous or successor
         if (existed == null || existed.getValue() == null
             || existed.getValue().getGpsCoordinates() == null) {
             return 0;
         }
+
+        // calculate distance from coordinates
         final GpsCoordinates actualCoordinates = actual.getGpsCoordinates();
         final GpsCoordinates existedCoordinates = existed.getValue().getGpsCoordinates();
         final double distance = calculateDistanceInKmh(
                 actualCoordinates.getLatitude(), actualCoordinates.getLongitude(),
                 existedCoordinates.getLatitude(), existedCoordinates.getLongitude()
         );
+
+        // calculate elapsed time
         final long time = Math.abs(ChronoUnit.SECONDS.between(actual.getTimestamp(), existed.getKey()));
         if (time == 0) {
             log.warn("Zero time diff between actual {} and existed {}", actual, existed.getValue());
             return 0;
         }
+
+        // calculate speed
         log.info("Distance: {} over time {}", distance, time);
         return Math.abs((distance / time) * 3600);
     }

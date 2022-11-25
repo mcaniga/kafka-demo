@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Service
 public class SpeedValidationCache {
+    // In real application, use caffeine - https://github.com/ben-manes/caffeine
     private final Map<Integer, Integer> busMaxSpeed;
 
     public SpeedValidationCache() {

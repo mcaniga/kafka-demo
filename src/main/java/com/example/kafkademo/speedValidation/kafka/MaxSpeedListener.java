@@ -1,6 +1,5 @@
 package com.example.kafkademo.speedValidation.kafka;
 
-import com.example.kafkademo.common.dto.MaxSpeedResponse;
 import com.example.kafkademo.common.dto.MaxSpeedUpdateEvent;
 import com.example.kafkademo.configurationManagement.config.MaxSpeedProducerProperties;
 import com.example.kafkademo.speedValidation.service.SpeedValidationService;
@@ -28,7 +27,6 @@ public class MaxSpeedListener {
     }
 
     @KafkaListener(
-            id = "maxSpeedListener",
             topics = "${speed-validation.max-speed-listener.topic}",
             groupId = "${speed-validation.max-speed-listener.groupId}",
             autoStartup = "${speed-validation.max-speed-listener.autoStartup}"

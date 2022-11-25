@@ -54,10 +54,10 @@ class TapDetectorTest {
             TestOutputTopic<String, ValidatedTap> outputTopic = topologyTestDriver
                     .createOutputTopic(OUTPUT_TOPIC, new StringDeserializer(), new ObjectMapperDeserializer<>(ValidatedTap.class, objectMapper));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.87364042501854, 18.022769726251678, "02:25:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.87364042501854, 18.022769726251678, "02:25:10"));
 
             List<KeyValue<String, ValidatedTap>> values = outputTopic.readKeyValuesToList();
             log.warn("Topic output {}", values);
@@ -80,11 +80,11 @@ class TapDetectorTest {
             TestOutputTopic<String, ValidatedTap> outputTopic = topologyTestDriver
                     .createOutputTopic(OUTPUT_TOPIC, new StringDeserializer(), new ObjectMapperDeserializer<>(ValidatedTap.class, objectMapper));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.87364042501854, 18.022769726251678, "02:28:10"));
-            inputTopic.pipeInput("bot1", makeTap(48.848148342526905, 17.996325061538116, "02:22:05"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.87364042501854, 18.022769726251678, "02:28:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.848148342526905, 17.996325061538116, "02:22:05"));
 
             List<KeyValue<String, ValidatedTap>> values = outputTopic.readKeyValuesToList();
             log.warn("Topic output {}", values);
@@ -107,10 +107,10 @@ class TapDetectorTest {
             TestOutputTopic<String, ValidatedTap> outputTopic = topologyTestDriver
                     .createOutputTopic(OUTPUT_TOPIC, new StringDeserializer(), new ObjectMapperDeserializer<>(ValidatedTap.class, objectMapper));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.849256823671936, 17.9937715526234, "02:21:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "02:21:30"));
-            inputTopic.pipeInput("bot1", makeTap(48.87364042501854, 18.022769726251678, "02:26:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.849256823671936, 17.9937715526234, "02:21:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "02:21:30"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.87364042501854, 18.022769726251678, "02:26:10"));
 
             List<KeyValue<String, ValidatedTap>> values = outputTopic.readKeyValuesToList();
             log.warn("Topic output {}", values);
@@ -122,7 +122,7 @@ class TapDetectorTest {
     }
 
     @Test
-    void testSpeedFraudMoreThanOneBotDifferentWindows() {
+    void testSpeedFraudMoreThanOnemediumIdDifferentWindows() {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         var detector = new SpeedFraudPipeline(DURATION, INPUT_TOPIC, OUTPUT_TOPIC, SPEED, new Properties(), objectMapper);
         final Topology topology = detector.buildPipeline(streamsBuilder);
@@ -134,29 +134,29 @@ class TapDetectorTest {
             TestOutputTopic<String, ValidatedTap> outputTopic = topologyTestDriver
                     .createOutputTopic(OUTPUT_TOPIC, new StringDeserializer(), new ObjectMapperDeserializer<>(ValidatedTap.class, objectMapper));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.87364042501854, 18.022769726251678, "02:25:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.87364042501854, 18.022769726251678, "02:25:10"));
 
-            inputTopic.pipeInput("bot2", makeTap("bot2", 48.85868813347197, 17.97660541523793, "05:20:00"));
-            inputTopic.pipeInput("bot2", makeTap("bot2", 48.849256823671936, 17.9937715526234, "05:22:00"));
-            inputTopic.pipeInput("bot2", makeTap("bot2", 48.85030169697089, 18.018276214196636, "05:25:00"));
-            inputTopic.pipeInput("bot2", makeTap("bot2", 48.87364042501854, 18.022769726251678, "05:25:10"));
+            inputTopic.pipeInput("mediumId2", makeTap("mediumId2", 48.85868813347197, 17.97660541523793, "05:20:00"));
+            inputTopic.pipeInput("mediumId2", makeTap("mediumId2", 48.849256823671936, 17.9937715526234, "05:22:00"));
+            inputTopic.pipeInput("mediumId2", makeTap("mediumId2", 48.85030169697089, 18.018276214196636, "05:25:00"));
+            inputTopic.pipeInput("mediumId2", makeTap("mediumId2", 48.87364042501854, 18.022769726251678, "05:25:10"));
 
             List<KeyValue<String, ValidatedTap>> values = outputTopic.readKeyValuesToList();
             log.warn("Topic output {}", values);
             assertEquals(2, values.size());
             // reduce was called for 2nd event within the minute
             assertEquals(new GpsCoordinates(48.87364042501854, 18.022769726251678), values.get(0).value.getGpsCoordinates());
-            assertEquals("bot1", values.get(0).key);
+            assertEquals("mediumId1", values.get(0).key);
             assertEquals(new GpsCoordinates(48.87364042501854, 18.022769726251678), values.get(1).value.getGpsCoordinates());
-            assertEquals("bot2", values.get(1).key);
+            assertEquals("mediumId2", values.get(1).key);
         }
     }
 
     @Test
-    void testSpeedFraudMoreThanOneBotSameWindows() {
+    void testSpeedFraudMoreThanOnemediumIdSameWindows() {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         var detector = new SpeedFraudPipeline(DURATION, INPUT_TOPIC, OUTPUT_TOPIC, SPEED, new Properties(), objectMapper);
         final Topology topology = detector.buildPipeline(streamsBuilder);
@@ -168,24 +168,24 @@ class TapDetectorTest {
             TestOutputTopic<String, ValidatedTap> outputTopic = topologyTestDriver
                     .createOutputTopic(OUTPUT_TOPIC, new StringDeserializer(), new ObjectMapperDeserializer<>(ValidatedTap.class, objectMapper));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.87364042501854, 18.022769726251678, "02:25:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.87364042501854, 18.022769726251678, "02:25:10"));
 
-            inputTopic.pipeInput("bot2", makeTap("bot2", 48.85868813347197, 17.97660541523793, "02:30:00"));
-            inputTopic.pipeInput("bot2", makeTap("bot2", 48.849256823671936, 17.9937715526234, "02:32:00"));
-            inputTopic.pipeInput("bot2", makeTap("bot2", 48.85030169697089, 18.018276214196636, "02:35:00"));
-            inputTopic.pipeInput("bot2", makeTap("bot2", 48.87364042501854, 18.022769726251678, "02:35:10"));
+            inputTopic.pipeInput("mediumId2", makeTap("mediumId2", 48.85868813347197, 17.97660541523793, "02:30:00"));
+            inputTopic.pipeInput("mediumId2", makeTap("mediumId2", 48.849256823671936, 17.9937715526234, "02:32:00"));
+            inputTopic.pipeInput("mediumId2", makeTap("mediumId2", 48.85030169697089, 18.018276214196636, "02:35:00"));
+            inputTopic.pipeInput("mediumId2", makeTap("mediumId2", 48.87364042501854, 18.022769726251678, "02:35:10"));
 
             List<KeyValue<String, ValidatedTap>> values = outputTopic.readKeyValuesToList();
             log.warn("Topic output {}", values);
             assertEquals(2, values.size());
             // reduce was called for 2nd event within the minute
             assertEquals(new GpsCoordinates(48.87364042501854, 18.022769726251678), values.get(0).value.getGpsCoordinates());
-            assertEquals("bot1", values.get(0).key);
+            assertEquals("mediumId1", values.get(0).key);
             assertEquals(new GpsCoordinates(48.87364042501854, 18.022769726251678), values.get(1).value.getGpsCoordinates());
-            assertEquals("bot2", values.get(1).key);
+            assertEquals("mediumId2", values.get(1).key);
         }
     }
 
@@ -202,17 +202,17 @@ class TapDetectorTest {
             TestOutputTopic<String, ValidatedTap> outputTopic = topologyTestDriver
                     .createOutputTopic(OUTPUT_TOPIC, new StringDeserializer(), new ObjectMapperDeserializer<>(ValidatedTap.class, objectMapper));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.87364042501854, 18.022769726251678, "02:28:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.87364042501854, 18.022769726251678, "02:28:10"));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85868813347197, 17.97660541523793, "03:29:10"));
-            inputTopic.pipeInput("bot1", makeTap(48.849256823671936, 17.9937715526234, "03:31:10"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "03:35:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.87364042501854, 18.022769726251678, "03:38:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85868813347197, 17.97660541523793, "03:29:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.849256823671936, 17.9937715526234, "03:31:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "03:35:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.87364042501854, 18.022769726251678, "03:38:10"));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "03:28:05"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "03:28:05"));
 
             List<KeyValue<String, ValidatedTap>> values = outputTopic.readKeyValuesToList();
             log.warn("Topic output {}", values);
@@ -235,11 +235,11 @@ class TapDetectorTest {
             TestOutputTopic<String, ValidatedTap> outputTopic = topologyTestDriver
                     .createOutputTopic(OUTPUT_TOPIC, new StringDeserializer(), new ObjectMapperDeserializer<>(ValidatedTap.class, objectMapper));
 
-            inputTopic.pipeInput("bot1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
-            inputTopic.pipeInput("bot1", makeTap(48.87364042501854, 18.022769726251678, "02:25:10"));
-            inputTopic.pipeInput("bot1", makeTap(48.85030169697089, 18.018276214196636, "02:25:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85868813347197, 17.97660541523793, "02:20:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.849256823671936, 17.9937715526234, "02:22:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "02:25:00"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.87364042501854, 18.022769726251678, "02:25:10"));
+            inputTopic.pipeInput("mediumId1", makeTap(48.85030169697089, 18.018276214196636, "02:25:10"));
 
             List<KeyValue<String, ValidatedTap>> values = outputTopic.readKeyValuesToList();
             log.warn("Topic output {}", values);
@@ -250,11 +250,11 @@ class TapDetectorTest {
     }
 
     private ValidatedTap makeTap(double latitude, double longitude, String time) {
-        return makeTap("bot1", latitude, longitude, time);
+        return makeTap("mediumId1", latitude, longitude, time);
     }
 
-    private ValidatedTap makeTap(String bot, double latitude, double longitude, String time) {
+    private ValidatedTap makeTap(String mediumId, double latitude, double longitude, String time) {
         final GpsCoordinates coordinates = new GpsCoordinates(latitude, longitude);
-        return new ValidatedTap(bot, coordinates, Instant.parse("2022-10-19T" + time + "Z"));
+        return new ValidatedTap(mediumId, coordinates, Instant.parse("2022-10-19T" + time + "Z"));
     }
 }
